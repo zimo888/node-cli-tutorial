@@ -352,13 +352,197 @@ generator-ios 就是生成器的主函数了
  this.fs.copyTpl(模板路径，目标路径，替换文本)
 
 输入的参数为
-	this.templatePath  这个变量会自动去找 templates 文件夹
-	
-	
+  this.templatePath  这个变量会自动去找 templates 文件夹
+  
+  
 最后，执行命令，打开目标目录，查看生成的文件，<%=name> 已经被替换了，注意，替换过程会转义你的内容，如果你替换的内容是一段 html的话，不需要转义，模板里面定义改成 <%-name> 就可以了。
-	
+  
+
+
+此时再去看RN的命令就简单多了，区别就在于它的模板是整个工程文件。
+
+看一下RN的 local-cli/generator-ios/index.js
+
+```
+var templateVars = {name: this.name};
+    // SomeApp/ios/SomeApp
+    this.fs.copyTpl(
+      this.templatePath(path.join('app', '**')),
+      this.destinationPath(path.join('ios', this.name)),
+      templateVars
+    );
+
+    // SomeApp/ios/SomeAppTests
+    this.fs.copyTpl(
+      this.templatePath(path.join('tests', 'Tests.m')),
+      this.destinationPath(path.join('ios', this.name + 'Tests', this.name + 'Tests.m')),
+      templateVars
+    );
+    this.fs.copy(
+      this.templatePath(path.join('tests', 'Info.plist')),
+      this.destinationPath(path.join('ios', this.name + 'Tests', 'Info.plist'))
+    );
+
+    // SomeApp/ios/SomeApp.xcodeproj
+    this.fs.copyTpl(
+      this.templatePath(path.join('xcodeproj', 'project.pbxproj')),
+      this.destinationPath(path.join('ios', this.name + '.xcodeproj', 'project.pbxproj')),
+      templateVars
+    );
+    this.fs.copyTpl(
+      this.templatePath(path.join('xcodeproj', 'xcshareddata', 'xcschemes', '_xcscheme')),
+      this.destinationPath(path.join('ios', this.name + '.xcodeproj', 'xcshareddata', 'xcschemes', this.name + '.xcscheme')),
+      templateVars
+    );
+```
+
+
+再看一下RN的 local-cli/generator-android/index.js
+
+```
+var templateParams = {
+      package: this.options.package,
+      name: this.name
+    };
+    if (!this.options.upgrade) {
+      this.fs.copyTpl(
+        this.templatePath(path.join('src', '**')),
+        this.destinationPath('android'),
+        templateParams
+      );
+      this.fs.copy(
+        this.templatePath(path.join('bin', '**')),
+        this.destinationPath('android')
+      );
+    } else {
+      this.fs.copyTpl(
+        this.templatePath(path.join('src', '*')),
+        this.destinationPath('android'),
+        templateParams
+      );
+      this.fs.copyTpl(
+        this.templatePath(path.join('src', 'app', '*')),
+        this.destinationPath(path.join('android', 'app')),
+        templateParams
+      );
+    }
+
+    var javaPath = path.join.apply(
+      null,
+      ['android', 'app', 'src', 'main', 'java'].concat(this.options.package.split('.'))
+    );
+    this.fs.copyTpl(
+      this.templatePath(path.join('package', '**')),
+      this.destinationPath(javaPath),
+      templateParams
+    );
+```
+
+
+两份模板文件，初始化了RN的HelloWorld 工程，和我刚写的
+区别在于RN 拷贝的是整个工程目录。
+
+所以说，在templates 文件夹下面放任何的文件都可以，只要把想替换的内容换成 <%= param>  就可以了。
+
+###Commands.js
+
+```
+const documentedCommands = [
+  require('./android/android'),
+  require('./server/server'),
+  require('./runIOS/runIOS'),
+  require('./runAndroid/runAndroid'),
+  require('./library/library'),
+  require('./bundle/bundle'),
+  require('./bundle/unbundle'),
+  require('./link/link'),
+  require('./link/unlink'),
+  require('./install/install'),
+  require('./install/uninstall'),
+  require('./upgrade/upgrade'),
+  require('./logAndroid/logAndroid'),
+  require('./logIOS/logIOS'),
+  require('./dependencies/dependencies'),
+];
+
+const commands: Array<Command> = [
+  ...documentedCommands,
+  ...undocumentedCommands,
+  ...getUserCommands(),
+];
+module.exports = commands;
+```
+
+RN的所有命令注册在了Commands.js 下
+
+然后在 cliEntry.js 里面使用，循环注册给了Commander
+
+
+```
+
+function run() {
+  const setupEnvScript = /^win/.test(process.platform)
+    ? 'setup_env.bat'
+    : 'setup_env.sh';
+
+  childProcess.execFileSync(path.join(__dirname, setupEnvScript));
+
+  const config = getCliConfig();
+  commands.forEach(cmd => addCommand(cmd, config));
+
+  commander.parse(process.argv);
+
+  const isValidCommand = commands.find(cmd => cmd.name.split(' ')[0] === process.argv[2]);
+
+  if (!isValidCommand) {
+    printUnknownCommand(process.argv[2]);
+    return;
+  }
+
+  if (!commander.args.length) {
+    commander.help();
+  }
+}
+
+```
 
 
 
+这就属于对项目结构划分的范畴了，增加一个命令，增加一个文件夹，然后注册进来，降低主文件耦合性。
 
+
+最新版本的0.39去掉了yeoman的方式，采用了纯查找字符串替换的方式(copyProjectTemplateAndReplace.js)，对于使用RN的人来讲没有任何影响，比较它的模板文件里面只有一个“HelloWorld” 字符串，但是yeoman的思想就再也不能通过它来传播了。
+
+```
+export default class HelloWorld extends Component {
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.welcome}>
+          Welcome to React Native!
+        </Text>
+        <Text style={styles.instructions}>
+          To get started, edit index.ios.js
+        </Text>
+        <Text style={styles.instructions}>
+          Press Cmd+R to reload,{'\n'}
+          Cmd+D or shake for dev menu
+        </Text>
+      </View>
+    );
+  }
+}
+
+```
+```
+ copyAndReplace(
+      absoluteSrcFilePath,
+      path.resolve(destPath, relativeRenamedPath),
+      {
+        'HelloWorld': newProjectName,
+        'helloworld': newProjectName.toLowerCase(),
+      },
+      contentChangedCallback,
+    );
+```
 
