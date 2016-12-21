@@ -279,13 +279,3 @@ function run(root, projectName, rnPackage, forceNpmClient) {
 }
 ```
 
-待续：
-##XSY Cli 开发
-### init
-### compile
-### run
-
-###开发中的 Command
-#### convert
-
-
