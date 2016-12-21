@@ -1,4 +1,4 @@
-注：react-native 最新版本已经不再使用yeoman ，但是yeoman还是有它使用的场景在的。
+注：react-native 0.39版本已经不再使用yeoman ，但是yeoman还是有它使用的场景在的。
 # Cli.js
 
 通过上文我们知道了 react-native init ProjectName 执行的操作里面
