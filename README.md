@@ -106,7 +106,6 @@ if(program.what){
 
 ##ReactNative init 发生了什么
 
-minimist 也可以接收参数
 
 ReactNative init 是RN官网推荐的初始化AwesomeProject，能够让迅速看到HelloWorld的命令，也是开发 RN 最开始的命令。
 
