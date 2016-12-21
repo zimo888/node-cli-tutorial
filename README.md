@@ -272,7 +272,7 @@ function run(root, projectName, rnPackage, forceNpmClient) {
       process.exit(1);
     }
     checkNodeVersion();
-    //下载完依赖之后，调用/node_components/react-native/local-cli/ 下的cli.js,执行 init 方法
+    //下载完依赖之后，调用/node_components/react-native/local-cli/cli.js,并执行 init 方法
     cli = require(CLI_MODULE_PATH());
     cli.init(root, projectName);
   });
