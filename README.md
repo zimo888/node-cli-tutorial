@@ -131,12 +131,12 @@ react-native init AwesomeProject  --verbose
 
 我们初始化输入的命令为 react-native init ProjectName
 
-//第一句就是要接收参数 
+第一句就是要接收参数 
 ```
 var argv = require('minimist')(process.argv.slice(2));
 ```
 
-//定义命令行所在的路径 /node_modules/react-native/cli.js
+定义命令行所在的路径 /node_modules/react-native/cli.js
 ```
 var CLI_MODULE_PATH = function() {
   return path.resolve(
@@ -147,7 +147,7 @@ var CLI_MODULE_PATH = function() {
   );
 };
 ```
-//定义package.json 所在的路径 /node_modules/react-native/
+定义package.json 所在的路径 /node_modules/react-native/
 ```
 var REACT_NATIVE_PACKAGE_JSON_PATH = function() {
   return path.resolve(
