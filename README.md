@@ -45,9 +45,9 @@ https://www.zhihu.com/question/36292298
 ###Commander
 
 commander是一个轻巧的 nodejs 模块，提供了用户命令行输入和参数解析强大功能。commander源自一个同名的Ruby项目。
-任意拷贝一个空的package.json
 
-package.json:
+创建一个 package.json 文件:
+
 ```
 {
   "name": "xsy-test-01",
