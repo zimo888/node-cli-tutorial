@@ -8,4 +8,4 @@
 // console.log(process.title)//：默认值为“node”，可以自定义该值。
 // console.log(process.version)//：Node的版本，比如v0.10.18。
 
-// console.log('hello world')
+console.log('hello world')
