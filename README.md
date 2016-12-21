@@ -128,12 +128,16 @@ react-native init AwesomeProject  --verbose
 
 打开/usr/local/bin 下的react-native 文件
 
-```
-输入命令为 react-native init ProjectName
-//第一句接收参数
-var argv = require('minimist')(process.argv.slice(2));
 
-//初始化命令行所在的路径 /node_modules/react-native/cli.js
+我们初始化输入的命令为 react-native init ProjectName
+
+//第一句就是要接收参数 
+```
+var argv = require('minimist')(process.argv.slice(2));
+```
+
+//定义命令行所在的路径 /node_modules/react-native/cli.js
+```
 var CLI_MODULE_PATH = function() {
   return path.resolve(
     process.cwd(),
@@ -142,8 +146,9 @@ var CLI_MODULE_PATH = function() {
     'cli.js'
   );
 };
-
-//初始化package.json 所在的路径 /node_modules/react-native/
+```
+//定义package.json 所在的路径 /node_modules/react-native/
+```
 var REACT_NATIVE_PACKAGE_JSON_PATH = function() {
   return path.resolve(
     process.cwd(),
@@ -152,10 +157,10 @@ var REACT_NATIVE_PACKAGE_JSON_PATH = function() {
     'package.json'
   );
 };
+```
 
-...
 核心创建工程的方法
-
+```
 function createProject(name, verbose, rnPackage, forceNpmClient) {
   var root = path.resolve(name);
   var projectName = path.basename(root);
@@ -168,7 +173,10 @@ function createProject(name, verbose, rnPackage, forceNpmClient) {
   if (!fs.existsSync(root)) {
     fs.mkdirSync(root);
   }
-//这个位置初始化了package.json 的内容
+```
+
+这个位置初始化了package.json 的内容
+```
   var packageJson = {
     name: projectName,
     version: '0.0.1',
@@ -180,7 +188,9 @@ function createProject(name, verbose, rnPackage, forceNpmClient) {
   //写入到根目录
   fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify(packageJson));
   process.chdir(root);
-//如果指定了 --verbose ，打印执行过程的详细信息
+ ```
+如果指定了 --verbose ，打印执行过程的详细信息
+```
   if (verbose) {
     runVerbose(root, projectName, rnPackage, forceNpmClient);
   } else {
@@ -202,7 +212,7 @@ function getInstallPackage(rnPackage) {
 }
 ```
 
-
+最后的Run方法
 ```
 function run(root, projectName, rnPackage, forceNpmClient) {
   const yarnVersion = (!forceNpmClient) && getYarnVersionIfAvailable();
