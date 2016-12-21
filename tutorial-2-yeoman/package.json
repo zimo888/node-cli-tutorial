@@ -1,0 +1,17 @@
+{
+  "name": "xsy-test-01",
+  "version": "0.0.1",
+  "description": "销售易",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gupei",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^2.9.0",
+    "minimist": "^1.2.0",
+    "yeoman-environment": "^1.6.6",
+    "yeoman-generator": "^0.24.1"
+  }
+}
