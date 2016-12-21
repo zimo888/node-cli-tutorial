@@ -102,9 +102,18 @@ if (program.en){
 if(program.what){
 	console.log(' int: %j', program.what);
 }
-```文件保存为 index.js
-输入 node index.js -h
+```
+
+文件保存为 index.js
+
+输入
+
+```
+node index.js -h
+```
+
 我们可以看到
+
 ```
   Usage: index [options]  
 
