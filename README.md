@@ -45,9 +45,25 @@ https://www.zhihu.com/question/36292298
 ###Commander
 
 commander是一个轻巧的 nodejs 模块，提供了用户命令行输入和参数解析强大功能。commander源自一个同名的Ruby项目。
+任意拷贝一个空的package.json
 
-安装
+```
+{
+  "name": "xsy-test-01",
+  "version": "0.0.1",
+  "description": "commander",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "zimo",
+  "license": "MIT",
+  "dependencies": {
+  }
+}
 
+```
+安装 commander 
 ```
 npm install --save commander
 ```
