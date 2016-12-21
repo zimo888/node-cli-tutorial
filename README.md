@@ -102,8 +102,27 @@ if (program.en){
 if(program.what){
 	console.log(' int: %j', program.what);
 }
+```文件保存为 index.js
+输入 node index.js -h
+我们可以看到
+```
+  Usage: index [options]  
+
+  Options:
+
+    -h, --help      output usage information
+    -V, --version   output the version number
+    -p, --pen       I have a pen
+    -a, --apple     I have an apple
+    -e, --en        en
+    -w, --what <n>  I have something
 ```
 
+上面的 .option 方法，分别定义了帮助文件中的各个命令的简写，以及命令描述。
+
+usage 是命令的使用方法说明。
+
+如果想在 -w 后面加输入的参数，加上<n>,"n"可以随意定义
 ##ReactNative init 发生了什么
 
 
